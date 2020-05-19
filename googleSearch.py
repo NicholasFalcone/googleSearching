@@ -23,6 +23,7 @@ _____________________________________________________________
 """
 
 def main():
+    results = list()
     print(title)
     startProcess()
 
@@ -37,11 +38,10 @@ def startProcess():
     #Start method to generate results
     startSearching(query, maxElements)
 
-
 #Function to class the Google API and extrapolate resutls
 def startSearching(query, maxResults):
     print("Start searching...")
-    for url in search(query, stop=maxResults, tbs=settings.tbs):
+    for url in search(query, stop=maxResults, tbs=settings.tbs, tld=settings.tld):
         print(url)
         results.append(url+" ")
     print(settings.csvFilePath)
@@ -92,21 +92,23 @@ def setBaseInfo():
     needToSave = checkBooleanCondiction("save on default csv file? (y/n)")
     settings.needToSave = needToSave
     if needToSave:
-        print('Insert output file name...(current name: out.csv)')
+        print('Insert output file name...(current name: '+ settings.csvFilePath + ')')
         outFileName = input()
         if outFileName != "":
             settings.csvFilePath = outFileName
 
 def setLevelOfDomain():
-    topLayerOfDomain = input("(optional) Insert the top level of domain: ")
-    if topLayerOfDomain == '':
-        topLayerOfDomain = '.com'
-    settings.tld = topLayerOfDomain
+    rowTopLayerDomain = input("(optional) Insert the top level of domain: ")
+    tl = rowTopLayerDomain.replace('.', '')
+    if tl == '':
+        tl = 'com'
+    print(tl)
+    settings.tld = tl
 
 def inputDate(message):
     while True:
         try:
-            date_entry = input('Enter a date in YYYY-MM-DD format')
+            date_entry = input('Enter a date in YYYY-MM-DD format: ')
             year, month, day = map(int, date_entry.split('-'))
             date = datetime.date( year, month, day)       
         except ValueError:
